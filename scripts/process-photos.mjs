@@ -10,7 +10,6 @@ mkdirSync("public/brand/web", { recursive: true });
 
 // [arquivo bruto, nome final]
 const jobs = [
-  [".raw/fachada.img", "fachada"],
   [".raw/noiva-buque.img", "noiva-buque"],
   [".raw/salao-cadeiras.img", "salao-cadeiras"],
   [".raw/cafe.img", "cafe"],
@@ -20,8 +19,7 @@ const jobs = [
   [".raw/ig/ta-ig-cabelos-ondas.jpg", "ondas-1"],
   [".raw/ig/ta-ig-mechas-morena.jpg", "mechas-1"],
   [".raw/ig/ta-ig-maquiagem.jpg", "maquiagem-1"],
-  [".raw/ig/ta-ig-sobrancelha.jpg", "sobrancelha-1"],
-  [".raw/ig/ta-ig-noiva-tiara.jpg", "noiva-tiara"],
+  [".raw/ig/ta-ig-sobrancelha2.jpg", "sobrancelha-1"],
   [".raw/ig/ta-ig-grid-1-loiro.jpg", "ig-1"],
   [".raw/ig/ta-ig-grid-2-progressiva.jpg", "ig-2"],
   [".raw/ig/ta-ig-grid-3-ruivo.jpg", "ig-3"],

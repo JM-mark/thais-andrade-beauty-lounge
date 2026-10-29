@@ -16,7 +16,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 /** Foto real do serviço; se ainda faltar foto boa, painel com número e um detalhe fino. */
 function Visual({ s, i, sizes, priority = false }: { s: Service; i: number; sizes: string; priority?: boolean }) {
-  if (has(s.photo)) return <Photo name={s.photo} sizes={sizes} priority={priority} className="h-full w-full" />;
+  if (has(s.photo)) return <Photo name={s.photo} sizes={sizes} priority={priority} objectPosition={s.pos} className="h-full w-full" />;
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center bg-gradient-to-b from-nude to-[#d8bfae]" role="img" aria-label={s.short}>
       <svg viewBox="0 0 60 60" className="mb-4 h-10 w-10 text-rosegold" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.2">
@@ -103,8 +103,8 @@ function Pinned() {
           <div className="relative w-px bg-ink/15"><div className="sv-bar absolute inset-0 origin-top scale-y-0 bg-rosegold" style={{ width: 3, left: -1 }} /></div>
           <ol className="flex flex-col justify-between">
             {services.map((s, i) => (
-              <li key={s.id} data-active="false" className="sv-idx flex items-baseline gap-3 text-[13px] text-ink-soft transition-colors duration-300 data-[active=true]:text-marsala data-[active=true]:font-medium">
-                <span className="font-display text-base">{pad(i + 1)}</span><span>{s.short}</span>
+              <li key={s.id} data-active="false" className="sv-idx flex items-baseline gap-3 text-[14px] text-ink-soft transition-colors duration-300 data-[active=true]:text-marsala data-[active=true]:font-medium">
+                <span className="font-display text-[17px]">{pad(i + 1)}</span><span>{s.short}</span>
               </li>
             ))}
           </ol>
@@ -135,7 +135,7 @@ export function Services() {
   const reduce = useReducedMotion();
   const desktop = useDesktop();
   return (
-    <section id="servicos" className="relative">
+    <section id="servicos" className="curve-nude bg-section-nude relative">
       <div className="wrap pt-[var(--section)] pb-12">
         <SectionHead label="Serviços" title={[<>Cuidado completo,</>, <><em>do cabelo à pele</em></>]} />
       </div>

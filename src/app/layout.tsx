@@ -44,8 +44,7 @@ const jsonLd = {
     addressLocality: "Hortolândia", addressRegion: "SP", postalCode: "13185-392", addressCountry: "BR",
   },
   geo: { "@type": "GeoCoordinates", latitude: SITE.geo.lat, longitude: SITE.geo.lng },
-  // TODO openingHours: confirmar com o salão
-  aggregateRating: { "@type": "AggregateRating", ratingValue: SITE.rating.value, reviewCount: SITE.rating.count, bestRating: 5 },
+  // openingHours: adicionar quando o salão confirmar
   sameAs: [SITE.instagram],
 };
 

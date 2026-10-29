@@ -20,8 +20,8 @@ export type PhotoEntry = {
 };
 
 export type PhotoKey =
-  | "fachada" | "recepcao" | "salaEspera" | "salaoCadeiras" | "cafe" | "esteticaMaca"
-  | "noivaBuque" | "noivaVitrine"
+  | "recepcao" | "salaEspera" | "salaoCadeiras" | "cafe" | "esteticaMaca"
+  | "noivaVitrine"
   | "mechas1" | "ondas1" | "sobrancelha1" | "maquiagem1";
 
 type Meta = { w: number; h: number; wMd: number; wSm: number; lqip: string };
@@ -32,8 +32,6 @@ const f = (name: string) => ({ src: `/fotos/${name}.webp`, srcMd: `/fotos/${name
 
 export const photos: Partial<Record<PhotoKey, PhotoEntry>> = {
   // Google Maps (proprietário)
-  fachada: { ...f("fachada"), alt: "Fachada do salão, com a placa Thaís Andrade Beauty Lounge e o portão branco", fonte: maps },
-  noivaBuque: { ...f("noiva-buque"), alt: "Noiva com buquê de lírios dentro do salão", fonte: maps },
   salaoCadeiras: { ...f("salao-cadeiras"), alt: "Área de cabelo com espelhos em arco e cadeiras", fonte: maps },
   cafe: { ...f("cafe"), alt: "Cantinho do café com xícaras e bandeja de madeira", fonte: maps },
   salaEspera: { ...f("sala-espera"), alt: "Sala de espera com poltronas verdes e janela", fonte: maps },
@@ -43,20 +41,17 @@ export const photos: Partial<Record<PhotoKey, PhotoEntry>> = {
   ondas1: { ...f("ondas-1"), alt: "Cabelo loiro com ondas", fonte: "Instagram", fonteUrl: ig("DUDkHcajUAL") },
   mechas1: { ...f("mechas-1"), alt: "Cabelo moreno iluminado", fonte: "Instagram", fonteUrl: ig("DXIYs3Rjdsa") },
   maquiagem1: { ...f("maquiagem-1"), alt: "Maquiagem social em close", fonte: "Instagram", fonteUrl: ig("DXUEnYtDTre") },
-  sobrancelha1: { ...f("sobrancelha-1"), alt: "Design de sobrancelhas", fonte: "Instagram", fonteUrl: ig("DUDxyMLDcpx") },
-  noivaVitrine: { ...f("noiva-tiara"), alt: "Noiva com tiara e cabelo cacheado", fonte: "Instagram", fonteUrl: ig("Da5ju4RTm5-", "reel") }, // TODO confirmar uso com a cliente (aparece cliente)
+  sobrancelha1: { ...f("sobrancelha-1"), alt: "Olho com a sobrancelha alinhada em close", fonte: "Instagram", fonteUrl: ig("DTlwX14DeVU", "reel") },
+  noivaVitrine: { ...f("noiva-buque"), alt: "Noiva com buquê de lírios dentro do salão", fonte: maps }, // TODO confirmar uso com a cliente (aparece cliente)
 };
 
 export const has = (k?: PhotoKey) => !!k && !!photos[k];
 
-/** Hero: a foto da noiva com buquê. */
-export const HERO_PHOTO: PhotoKey = "noivaBuque";
-
 /** Galeria "O espaço": só fotos reais do ambiente (a maca está em Estética), na ordem exibida. */
 export const spaceGallery: { key: PhotoKey; caption: string }[] = [
-  { key: "recepcao", caption: "Recepção" },
-  { key: "salaEspera", caption: "Sala de espera" },
   { key: "salaoCadeiras", caption: "Área de cabelo" },
+  { key: "salaEspera", caption: "Sala de espera" },
+  { key: "recepcao", caption: "Recepção" },
   { key: "cafe", caption: "Cantinho do café" },
 ];
 

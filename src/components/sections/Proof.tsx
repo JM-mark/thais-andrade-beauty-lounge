@@ -7,24 +7,26 @@ import { gsap, prefersReduced } from "@/lib/gsap";
 import { SITE } from "@/config";
 import { instagramPosts } from "@/content/photos";
 
-// TODO inserir trechos reais das avaliações do Google, com autorização. Vazio por padrão (sem depoimentos inventados).
+// Sem depoimentos inventados: trechos reais das avaliações do Google só entram com autorização.
 
-/** Avaliações + Instagram em uma seção compacta: nota à esquerda, grid 3×2 de posts reais à direita. */
+const Star = () => (
+  <svg viewBox="0 0 24 24" className="star h-9 w-9 text-rosegold sm:h-11 sm:w-11" fill="currentColor" aria-hidden="true">
+    <path d="M12 2.4l2.95 6.2 6.75.85-4.95 4.7 1.25 6.7L12 17.5l-6 3.35 1.25-6.7-4.95-4.7 6.75-.85z" />
+  </svg>
+);
+
+/** Avaliação + Instagram em uma seção compacta: 5 estrelas à esquerda, grid 3×2 de posts reais à direita. */
 export function Proof() {
-  const num = useRef<HTMLSpanElement>(null);
-  const fmt = (n: number) => n.toFixed(1).replace(".", ",");
+  const stars = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = num.current;
-    if (!el) return;
-    if (prefersReduced()) { el.textContent = fmt(SITE.rating.value); return; }
-    const o = { v: 0 };
-    const t = gsap.to(o, {
-      v: SITE.rating.value, duration: 2, ease: "power2.out",
-      onUpdate: () => { el.textContent = fmt(o.v); },
-      scrollTrigger: { trigger: el, start: "top 85%", once: true },
+    const el = stars.current;
+    if (!el || prefersReduced()) return;
+    const t = gsap.from(el.querySelectorAll(".star"), {
+      scale: 0, opacity: 0, transformOrigin: "50% 50%", duration: 0.7, stagger: 0.12, ease: "back.out(2)",
+      scrollTrigger: { trigger: el, start: "top 88%", once: true },
     });
-    return () => { t.scrollTrigger?.kill(); t.kill(); };
+    return () => { t.scrollTrigger?.kill(); t.kill(); gsap.set(el.querySelectorAll(".star"), { clearProps: "all" }); };
   }, []);
 
   return (
@@ -32,11 +34,10 @@ export function Proof() {
       <div className="grid12 items-start gap-y-12">
         <div className="col-span-12 lg:col-span-5">
           <p className="label">No Google</p>
-          <div className="mt-6 flex items-baseline gap-3">
-            <span ref={num} className="font-display text-[clamp(5rem,10vw,7.5rem)] leading-[0.9] text-marsala">{fmt(SITE.rating.value)}</span>
-            <span className="text-[clamp(1.5rem,3vw,2.25rem)] text-rosegold" role="img" aria-label="5 estrelas">★</span>
+          <div ref={stars} className="mt-6 flex gap-1.5" role="img" aria-label="5 estrelas">
+            {[0, 1, 2, 3, 4].map((i) => <Star key={i} />)}
           </div>
-          <MaskLines as="h2" className="mt-4 font-display text-3xl" lines={[<>{SITE.rating.count} avaliações <em>no Google</em></>]} />
+          <MaskLines as="h2" className="mt-6 font-display text-[clamp(2rem,3.4vw,2.75rem)] leading-[1.05]" lines={[<>Avaliado com <em>5 estrelas</em></>, <>no Google</>]} />
           <Reveal className="mt-8 flex flex-wrap gap-3">
             <a className="btn btn-ghost" href={SITE.maps} target="_blank" rel="noopener noreferrer">Ler avaliações no Google</a>
           </Reveal>
@@ -45,7 +46,7 @@ export function Proof() {
         <div className="col-span-12 lg:col-span-7">
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <h3 className="font-display text-3xl">No <em>Instagram</em></h3>
-            <a className="text-[13px] font-medium uppercase tracking-[0.14em] text-marsala underline underline-offset-8" href={SITE.instagram} target="_blank" rel="noopener noreferrer">{SITE.instagramHandle}</a>
+            <a className="inline-flex min-h-11 items-center text-[13px] font-medium uppercase tracking-[0.14em] text-marsala underline underline-offset-8" href={SITE.instagram} target="_blank" rel="noopener noreferrer">{SITE.instagramHandle}</a>
           </div>
           <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
             {instagramPosts.map((p) => (

@@ -1,14 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Photo } from "../Photo";
 import { MaskLines, Magnetic } from "../motion";
 import { useBooking } from "../BookingProvider";
 import { gsap, prefersReduced } from "@/lib/gsap";
-import { HERO_PHOTO } from "@/content/photos";
 import { SITE, wa } from "@/config";
 
-const rating = `${SITE.rating.value.toFixed(1).replace(".", ",")}`;
 
 /**
  * Hero editorial: título à esquerda e a foto real da noiva em arco à direita (no celular: título, botões e depois a foto).
@@ -33,7 +30,7 @@ export function Hero() {
 
   const badge = (cls: string) => (
     <p className={`hero-fade items-center gap-2 rounded-full border border-rosegold/70 px-4 py-2 text-sm ${cls}`}>
-      <span className="text-marsala">★</span> <strong className="font-medium">{rating}</strong> no Google · {SITE.rating.count} avaliações
+      <span className="tracking-[0.2em] text-marsala" aria-hidden="true">★★★★★</span> Avaliado com 5 estrelas no Google
     </p>
   );
 
@@ -54,7 +51,7 @@ export function Hero() {
           <div ref={media} className="mx-auto h-[42svh] max-h-[460px] w-[70%] lg:h-[74svh] lg:max-h-none lg:w-full lg:max-w-[28rem]">
             <div className="hero-media h-full w-full">
               <div className="hero-zoom h-full w-full">
-                <Photo name={HERO_PHOTO} priority sizes="(min-width: 1024px) 450px, 70vw" objectPosition="center 30%" className="h-full w-full [border-radius:999px_999px_0_0]" />
+                <div className="h-full w-full bg-nude" />
               </div>
             </div>
           </div>

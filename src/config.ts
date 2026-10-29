@@ -8,7 +8,6 @@ export const SITE = {
   geo: { lat: -22.9019284, lng: -47.1718099 },
   // TODO confirmar abertura e dias; Google indica "fecha às 18:00"
   hours: "Consulte os horários pelo WhatsApp (fecha às 18h)",
-  rating: { value: 5.0, count: 67 }, // TODO atualizar antes de publicar
   instagram: "https://www.instagram.com/thaisandradebeautylounge",
   instagramHandle: "@thaisandradebeautylounge",
   maps: "https://www.google.com/maps/search/?api=1&query=THAIS+ANDRADE+BEAUTY+LOUNGE+Hortol%C3%A2ndia",

@@ -159,3 +159,41 @@ html[data-intro="first"] { --hero-delay: 1.2s; }
 }
 .curve-both::before, .curve-top::before { top: 1px; transform: translateY(-100%); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
 .curve-both::after { bottom: 1px; transform: translateY(100%); border-radius: 0 0 50% 50% / 0 0 100% 100%; }
+
+/* Marquee refinado (CSS puro) */
+.mq { position: relative; height: 64px; overflow: hidden; border-block: 1px solid rgba(199, 154, 134, 0.45);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 80px, #000 calc(100% - 80px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 80px, #000 calc(100% - 80px), transparent); }
+.mq-track { display: flex; width: max-content; height: 100%; align-items: center; animation: marquee 45s linear infinite; }
+.mq:hover .mq-track { animation-play-state: paused; }
+.mq-row { display: flex; flex-shrink: 0; align-items: center; }
+.mq-item { display: inline-flex; align-items: center; gap: 2.25rem; padding-right: 2.25rem; font-family: var(--font-body); font-weight: 500; font-size: 13px;
+  letter-spacing: 0.3em; text-transform: uppercase; white-space: nowrap; color: rgba(30, 21, 23, 0.7); }
+.mq-dot { display: block; width: 5px; height: 5px; background: var(--color-rosegold); transform: rotate(45deg); flex-shrink: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .mq { -webkit-mask-image: none; mask-image: none; }
+  .mq-track { animation: none; width: 100%; justify-content: center; }
+  .mq-dup { display: none; }
+}
+
+/* Cursor personalizado: ponto 8px, anel 44px em links/botões, disco 72px "Arraste". O nativo fica em campos, calendário e agendamento. */
+.cursor { position: fixed; left: 0; top: 0; z-index: 2147483000; width: 0; height: 0; pointer-events: none; opacity: 0; transition: opacity 0.2s; will-change: transform; display: none; }
+.has-cursor .cursor { display: block; }
+.cursor[data-visible="1"] { opacity: 1; }
+.cursor::before { content: ""; position: absolute; left: 0; top: 0; width: 8px; height: 8px; border-radius: 50%; transform: translate(-50%, -50%);
+  background: var(--color-marsala); box-shadow: 0 0 0 1px rgba(247, 242, 236, 0.7);
+  transition: width 0.25s var(--ease-lux), height 0.25s var(--ease-lux), background-color 0.25s, border-color 0.25s; }
+.cursor[data-state="link"]::before { width: 44px; height: 44px; background: transparent; border: 1.5px solid var(--color-marsala); box-shadow: 0 0 0 1px rgba(247, 242, 236, 0.5); }
+.cursor[data-state="drag"]::before { width: 72px; height: 72px; }
+.cursor-label { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-ivory); opacity: 0; transition: opacity 0.2s; white-space: nowrap; }
+.cursor[data-state="drag"] .cursor-label { opacity: 1; }
+html.has-cursor, html.has-cursor a, html.has-cursor button, html.has-cursor [role="button"], html.has-cursor [role="radio"], html.has-cursor label, html.has-cursor summary { cursor: none; }
+html.has-cursor input, html.has-cursor textarea, html.has-cursor select, html.has-cursor iframe,
+html.has-cursor [data-native-cursor], html.has-cursor [data-native-cursor] *, html.has-cursor [role="dialog"], html.has-cursor [role="dialog"] * { cursor: auto; }
+html.has-cursor [data-native-cursor] :is(a, button, label, [role="radio"], .chip), html.has-cursor [role="dialog"] :is(a, button, label, [role="radio"], .chip) { cursor: pointer; }
+html.has-cursor [data-native-cursor] button:disabled, html.has-cursor [role="dialog"] button:disabled { cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce), (hover: none), (max-width: 1023px) { .cursor { display: none !important; } }
+
+/* Vitrine nude com borda superior em curva (sem corte seco com o marfim) */
+.curve-nude { --curve: clamp(28px, 4.5vw, 64px); }
+.curve-nude::before { content: ""; position: absolute; left: 0; right: 0; top: 1px; height: var(--curve); background: var(--color-nude); transform: translateY(-100%); border-radius: 50% 50% 0 0 / 100% 100% 0 0; pointer-events: none; }
