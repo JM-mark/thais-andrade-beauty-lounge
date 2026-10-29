@@ -20,7 +20,6 @@ npm run lint
 |---|---|
 | WhatsApp, endereço, horário, nota do Google, links | `src/config.ts` |
 | Serviços e textos | `src/content/services.ts` |
-| Equipe ("Quem cuida de você"; todo pedido vai para o WhatsApp único de `src/config.ts`) | `src/content/team.ts` |
 | Fotos reais (Maps/Instagram do salão) | `src/content/photos.ts`, arquivos em `public/fotos/`; reprocessar com `node scripts/process-photos.mjs` |
 | FAQ | `src/content/faq.ts` |
 | Dias e horários do agendamento (mock) | `src/lib/availability.ts` |
@@ -50,7 +49,7 @@ O workflow `.github/workflows/deploy.yml` faz o build com o basePath do reposit�
 
 ## Como o agendamento funciona
 
-Stepper em 4 etapas (serviço, profissional como preferência, data/horário, dados) que roda 100% no navegador. Ao confirmar, abre `wa.me/<número>?text=...` com a mensagem pronta. A interface sempre diz que é um **pedido**; o salão confirma pelo WhatsApp. Há botão "Adicionar à agenda" (`.ics`). Se `WHATSAPP_NUMBER` ficar vazio, o site copia a mensagem e abre o Linktree do salão.
+Stepper em 3 etapas (serviço, data/horário, dados). Não há escolha de profissional: todo pedido vai para o único WhatsApp de `src/config.ts`. que roda 100% no navegador. Ao confirmar, abre `wa.me/<número>?text=...` com a mensagem pronta. A interface sempre diz que é um **pedido**; o salão confirma pelo WhatsApp. Há botão "Adicionar à agenda" (`.ics`). Se `WHATSAPP_NUMBER` ficar vazio, o site copia a mensagem e abre o Linktree do salão.
 
 ## Lista de TODOs que dependem do salão
 
@@ -58,7 +57,6 @@ Stepper em 4 etapas (serviço, profissional como preferência, data/horário, da
 - Fotos em resolução original do espaço, da equipe e dos trabalhos (hoje vêm do Google Maps e do Instagram do salão, em tamanho reduzido)
 - Confirmar que (19) 98717-2370 é o WhatsApp principal
 - Horário de funcionamento e dias de atendimento (hoje: domingo fechado, horários mock)
-- Especialidade de cada profissional; confirmar se Franciele faz parte da equipe
 - Serviços marcados como não confirmados: estética facial/protocolos, unhas
 - Etapas reais do Dia da Noiva (prova, planejamento etc.)
 - Formas de pagamento, estacionamento, política de cancelamento e antecedência para noivas (FAQ)
@@ -80,7 +78,7 @@ As fotos vêm do Google Maps/Instagram do salão em tamanho reduzido. Pedir o or
 - `noiva-buque` (hero): 1200×1600 px. Ideal: 2000 px ou mais no lado menor.
 - `maquiagem-1` (640×796) e `sobrancelha-1` (640×1136): só entram no palco pequeno (340 px).
 - `ondas-1`, `mechas-1`, `esteticaMaca` e as fotos do espaço (720 px): servem, mas ganham nitidez com o original.
-- **Falta uma foto de noiva real** (em alta) para o card "Dia da Noiva" da vitrine: ele mostra o painel com número até a chave `noivaVitrine` ser preenchida em `src/content/photos.ts`.
+- `noivaVitrine` (card "Dia da Noiva"): 720×1280, do Instagram do salão; pedir o original.
 
 ## Performance (medido localmente)
 Lighthouse mobile (simulado, primeira visita): Acessibilidade 100, Performance 73-74 (LCP observado ~0,3 s; o simulado sobe por causa da intro e do JavaScript da primeira visita). Sem a intro, a mesma página marca 97. Peso da página inicial no celular: ~1,3 MB; foto do hero: ~90 KB.

@@ -2,7 +2,6 @@ import { SITE, wa } from "@/config";
 
 export type Booking = {
   services: string[];
-  pro: string; // preferência; o pedido sempre vai para o único WhatsApp do salão
   date: string; // yyyy-mm-dd
   time: string;
   name: string;
@@ -37,7 +36,6 @@ export function buildMessage(b: Booking) {
   const lines = [
     "Olá! Gostaria de agendar pelo site 💐",
     `*Serviço:* ${b.services.join(" + ")}`,
-    `*Profissional preferida:* ${b.pro}`,
     `*Data:* ${prettyDate(b.date)} às ${b.time}`,
   ];
   if (b.weddingDate) lines.push(`*Data do casamento:* ${prettyDate(b.weddingDate)}`);
@@ -67,7 +65,7 @@ export function buildIcs(b: Booking) {
     `DTSTART:${f(start)}`, `DTEND:${f(end)}`,
     `SUMMARY:${b.services.join(" + ")} (pedido) - ${SITE.name}`,
     `LOCATION:${SITE.address}`,
-    `DESCRIPTION:Pedido de agendamento (preferência: ${b.pro}). Aguardando confirmação pelo WhatsApp.`,
+    "DESCRIPTION:Pedido de agendamento. Aguardando confirmação pelo WhatsApp.",
     "END:VEVENT", "END:VCALENDAR",
   ].join("\r\n");
 }

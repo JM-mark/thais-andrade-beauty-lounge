@@ -21,6 +21,7 @@ const jobs = [
   [".raw/ig/ta-ig-mechas-morena.jpg", "mechas-1"],
   [".raw/ig/ta-ig-maquiagem.jpg", "maquiagem-1"],
   [".raw/ig/ta-ig-sobrancelha.jpg", "sobrancelha-1"],
+  [".raw/ig/ta-ig-noiva-tiara.jpg", "noiva-tiara"],
   [".raw/ig/ta-ig-grid-1-loiro.jpg", "ig-1"],
   [".raw/ig/ta-ig-grid-2-progressiva.jpg", "ig-2"],
   [".raw/ig/ta-ig-grid-3-ruivo.jpg", "ig-3"],

@@ -31,14 +31,14 @@ export function Space() {
 
   if (!items.length) return null;
   return (
-    <section id="espaco" ref={section} className="bg-section-nude section overflow-hidden">
+    <section id="espaco" ref={section} className="section overflow-hidden">
       <div className="wrap">
         <SectionHead label="O espaço" className="mb-12" title={[<>Um lugar para</>, <><em>desacelerar</em></>]} />
       </div>
       <div
-        ref={ref} data-cursor="drag" data-lenis-prevent-wheel tabIndex={0} role="region" aria-label="Galeria do espaço, use as setas para navegar"
+        ref={ref} data-lenis-prevent-wheel tabIndex={0} role="region" aria-label="Galeria do espaço, use as setas para navegar"
         onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerLeave={up} onDragStart={(e) => e.preventDefault()}
-        className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-6 pl-[max(var(--gutter),calc((100vw-1240px)/2+var(--gutter)))] pr-[var(--gutter)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex cursor-grab snap-x active:cursor-grabbing snap-mandatory gap-5 overflow-x-auto pb-6 pl-[max(var(--gutter),calc((100vw-1240px)/2+var(--gutter)))] pr-[var(--gutter)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map((g, i) => (
           <figure key={g.key} className={`snap-center shrink-0 select-none ${i % 2 ? "mt-12" : ""}`}>

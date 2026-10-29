@@ -11,7 +11,7 @@ export type Service = {
 };
 
 // Textos em tom de convite; nada de promessa que o salão não confirmou.
-// Nenhuma foto se repete no site: o hero usa noivaBuque; o card da noiva usa noivaVitrine (TODO outra noiva real).
+// Nenhuma foto se repete no site: o hero usa noivaBuque; o card da noiva usa noivaVitrine.
 export const services: Service[] = [
   { id: "dia-da-noiva", name: ["Dia da", "Noiva"], short: "Dia da Noiva", noiva: true, confirmed: true, photo: "noivaVitrine",
     desc: "Penteado e maquiagem para o seu grande dia. Mãe e madrinhas também podem se arrumar com a gente. Consulte pelo WhatsApp." },

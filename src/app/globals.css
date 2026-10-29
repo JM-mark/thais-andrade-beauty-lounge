@@ -133,9 +133,6 @@ body::after {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
 }
 
-@media (pointer: fine) {
-  .has-cursor, .has-cursor a, .has-cursor button { cursor: none; }
-}
 
 /* Hero 100% CSS: a foto e o título pintam cedo (bom para LCP) e a revelação não depende do JavaScript.
    data-intro (definido por script inline no <head>): "first" = intro vai rodar, "seen" = já rodou nesta sessão. */
@@ -154,3 +151,11 @@ html[data-intro="first"] { --hero-delay: 1.2s; }
 .hero-fade { animation: fadeUp 1s var(--ease-lux) both; animation-delay: calc(var(--hero-delay) + 0.45s); }
 .photo-in { animation: photoIn 0.6s var(--ease-lux) both; }
 @media (prefers-reduced-motion: reduce) { .hero-zoom, .mask-hero, .hero-fade, .photo-in { animation: none; } .hero-media::after { display: none; } }
+
+/* Transições suaves: o bloco vinho entra e sai em curva, sem corte seco entre as cores. */
+.curve-both, .curve-top { --curve: clamp(28px, 4.5vw, 64px); }
+.curve-both::before, .curve-top::before, .curve-both::after {
+  content: ""; position: absolute; left: 0; right: 0; height: var(--curve); background: var(--color-wine); pointer-events: none;
+}
+.curve-both::before, .curve-top::before { top: 1px; transform: translateY(-100%); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+.curve-both::after { bottom: 1px; transform: translateY(100%); border-radius: 0 0 50% 50% / 0 0 100% 100%; }

@@ -3,7 +3,7 @@ import { SITE, asset } from "@/config";
 
 export function Footer() {
   return (
-    <footer className="on-dark bg-wine pb-28 pt-20 text-ivory lg:pb-12">
+    <footer className="on-dark curve-top relative bg-wine pb-28 pt-20 text-ivory lg:pb-12">
       <div className="wrap">
         <div className="grid12 gap-y-12">
           <div className="col-span-12 lg:col-span-5">

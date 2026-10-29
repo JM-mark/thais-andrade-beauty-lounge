@@ -135,12 +135,12 @@ export function Services() {
   const reduce = useReducedMotion();
   const desktop = useDesktop();
   return (
-    <section id="servicos" className="bg-section-nude relative">
+    <section id="servicos" className="relative">
       <div className="wrap pt-[var(--section)] pb-12">
         <SectionHead label="Serviços" title={[<>Cuidado completo,</>, <><em>do cabelo à pele</em></>]} />
       </div>
       {desktop && !reduce ? <Pinned /> : <Cards />}
-      <div className="pb-[var(--section)]" />
+      <div className={desktop && !reduce ? "pb-10" : "pb-[var(--section)]"} />
     </section>
   );
 }

@@ -44,7 +44,7 @@ export const photos: Partial<Record<PhotoKey, PhotoEntry>> = {
   mechas1: { ...f("mechas-1"), alt: "Cabelo moreno iluminado", fonte: "Instagram", fonteUrl: ig("DXIYs3Rjdsa") },
   maquiagem1: { ...f("maquiagem-1"), alt: "Maquiagem social em close", fonte: "Instagram", fonteUrl: ig("DXUEnYtDTre") },
   sobrancelha1: { ...f("sobrancelha-1"), alt: "Design de sobrancelhas", fonte: "Instagram", fonteUrl: ig("DUDxyMLDcpx") },
-  // noivaVitrine: TODO foto de outra noiva real do Instagram (a do buquê já está no hero). Sem ela, o card mostra o painel numérico.
+  noivaVitrine: { ...f("noiva-tiara"), alt: "Noiva com tiara e cabelo cacheado", fonte: "Instagram", fonteUrl: ig("Da5ju4RTm5-", "reel") }, // TODO confirmar uso com a cliente (aparece cliente)
 };
 
 export const has = (k?: PhotoKey) => !!k && !!photos[k];

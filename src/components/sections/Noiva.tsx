@@ -83,7 +83,7 @@ export function Noiva() {
   const { openBooking } = useBooking();
 
   return (
-    <section id="noiva" className="on-dark relative bg-wine text-ivory">
+    <section id="noiva" className="on-dark curve-both relative bg-wine text-ivory">
       {desktop && !reduce ? <Timeline /> : <Stacked />}
 
       <div className="wrap flex flex-col items-center gap-6 pb-[var(--section)] pt-16 text-center">
