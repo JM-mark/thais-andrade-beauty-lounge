@@ -7,48 +7,54 @@ import { MaskLines, Reveal, Magnetic } from "../motion";
 import { useBooking } from "../BookingProvider";
 import { gsap } from "@/lib/gsap";
 import { useDesktop } from "@/lib/useDesktop";
-import type { PhotoKey } from "@/content/photos";
+import { has, type PhotoKey } from "@/content/photos";
 
-// TODO confirmar as etapas com o salão
+// TODO confirmar etapas com o salão. Em tom de convite; não prometem serviço específico.
 const steps = [
-  ["Prova e teste", "Conversamos sobre o seu sonho e testamos penteado e maquiagem antes do grande dia."],
-  ["Planejamento do look", "Definimos horários, a equipe e o que cada pessoa vai precisar na manhã do casamento."],
-  ["Dia da noiva no salão", "Você chega, respira e se deixa cuidar. Mãe e madrinhas também são bem-vindas."],
-  ["Retoque e acompanhamento", "Fechamos os detalhes e deixamos tudo pronto para você seguir tranquila para a cerimônia."],
+  ["Prova e teste", "Conversamos sobre o seu sonho e, se fizer sentido para você, testamos o visual antes do grande dia."],
+  ["Planejamento do look", "Combinamos juntas o penteado e a maquiagem que combinam com o seu vestido e com você."],
+  ["O grande dia", "Você chega, respira e se deixa cuidar. Mãe e madrinhas também podem se arrumar com a gente."],
+  ["Fale com a gente", "Reserve a sua data pelo WhatsApp e tire todas as dúvidas com o salão."],
 ];
 
-const mosaic: { p: PhotoKey; cls: string; speed: number }[] = [
-  { p: "brideBack", cls: "col-span-6 md:col-span-4 aspect-[3/4]", speed: -40 },
-  { p: "lace", cls: "col-span-6 md:col-span-3 aspect-[3/4] md:mt-24", speed: 30 },
-  { p: "updo", cls: "col-span-6 md:col-span-3 aspect-[4/5]", speed: -70 },
-  { p: "pearl", cls: "col-span-6 md:col-span-2 aspect-square md:mt-40", speed: 20 },
-];
+// Até 2 fotos reais de noivas do salão (sem repetir as do hero e da vitrine). Sem foto, a galeria some.
+const gallery: PhotoKey[] = ["noiva3"];
+
+function Intro() {
+  return (
+    <>
+      <p className="eyebrow mb-4">Dia da Noiva</p>
+      <h2 className="h2 max-w-[14ch]">O grande dia merece <em>uma produção à altura</em></h2>
+      <p className="mt-6 max-w-md text-[1.0625rem] text-nude">
+        Beleza, cuidado e atenção aos detalhes. Mãe e madrinhas também podem se arrumar com a gente. Consulte pelo WhatsApp.
+      </p>
+    </>
+  );
+}
 
 function Timeline() {
   const root = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const dist = () => Math.max(0, track.current!.scrollWidth - window.innerWidth + 80);
+      const dist = () => Math.max(0, track.current!.scrollWidth - window.innerWidth);
       gsap.to(track.current, {
         x: () => -dist(), ease: "none",
-        scrollTrigger: { trigger: root.current, start: "top top", end: () => `+=${dist() + 200}`, pin: true, scrub: 0.6, invalidateOnRefresh: true },
+        scrollTrigger: { trigger: root.current, start: "top top", end: () => `+=${dist()}`, pin: true, scrub: 0.5, invalidateOnRefresh: true },
       });
     }, root);
     return () => ctx.revert();
   }, []);
+  // Título e linha do tempo na mesma tela; o trilho começa alinhado ao container e termina com respiro.
   return (
-    <div ref={root} className="flex h-[100svh] items-center overflow-hidden">
-      <div ref={track} className="flex w-max items-stretch gap-0 pl-[var(--gutter)] pr-[10vw]">
-        <div className="flex w-[34vw] shrink-0 flex-col justify-center pr-16">
-          <p className="eyebrow mb-4">Como funciona</p>
-          <h3 className="h2">Do primeiro teste ao <em>sim</em></h3>
-        </div>
+    <div ref={root} className="flex h-[100svh] items-center overflow-hidden pt-16">
+      <div ref={track} className="flex w-max items-stretch pl-[max(var(--gutter),calc((100vw-1600px)/2+var(--gutter)))] pr-[12vw]">
+        <div className="flex w-[min(34rem,40vw)] shrink-0 flex-col justify-center pr-16"><Intro /></div>
         {steps.map(([t, d], i) => (
-          <div key={t} className="relative flex w-[28vw] shrink-0 flex-col justify-center border-l border-rosegold/60 px-10">
+          <div key={t} className="flex w-[22rem] shrink-0 flex-col justify-center border-l border-rosegold/60 px-8">
             <span className="font-display text-7xl italic text-rosegold">0{i + 1}</span>
             <h4 className="mt-4 font-display text-4xl">{t}</h4>
-            <p className="mt-3 max-w-xs text-nude">{d}</p>
+            <p className="mt-3 max-w-xs text-[1.0625rem] text-nude">{d}</p>
           </div>
         ))}
       </div>
@@ -58,15 +64,18 @@ function Timeline() {
 
 function Stacked() {
   return (
-    <ol className="wrap space-y-10">
-      {steps.map(([t, d], i) => (
-        <Reveal as="li" key={t} className="border-t border-rosegold/60 pt-6">
-          <span className="font-display text-5xl italic text-rosegold">0{i + 1}</span>
-          <h4 className="mt-2 font-display text-3xl">{t}</h4>
-          <p className="mt-2 max-w-md text-nude">{d}</p>
-        </Reveal>
-      ))}
-    </ol>
+    <div className="wrap py-[var(--section)]">
+      <Intro />
+      <ol className="mt-14 space-y-10">
+        {steps.map(([t, d], i) => (
+          <Reveal as="li" key={t} className="border-t border-rosegold/60 pt-6">
+            <span className="font-display text-5xl italic text-rosegold">0{i + 1}</span>
+            <h4 className="mt-2 font-display text-3xl">{t}</h4>
+            <p className="mt-2 max-w-md text-[1.0625rem] text-nude">{d}</p>
+          </Reveal>
+        ))}
+      </ol>
+    </div>
   );
 }
 
@@ -75,9 +84,10 @@ export function Noiva() {
   const desktop = useDesktop();
   const gal = useRef<HTMLDivElement>(null);
   const { openBooking } = useBooking();
+  const shown = gallery.filter(has);
 
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || !shown.length) return;
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>(".mosaic-item").forEach((el) => {
         gsap.fromTo(el, { y: -Number(el.dataset.speed) }, {
@@ -87,29 +97,24 @@ export function Noiva() {
       });
     }, gal);
     return () => ctx.revert();
-  }, [reduce]);
+  }, [reduce, shown.length]);
 
   return (
     <section id="noiva" className="on-dark relative bg-wine text-ivory">
-      <div className="wrap pt-[var(--section)] pb-16">
-        <p className="eyebrow mb-4">Dia da Noiva</p>
-        <MaskLines className="h2 max-w-4xl" lines={[<>O grande dia merece</>, <>uma produção <em>à altura</em></>]} />
-        <Reveal className="mt-8 max-w-xl text-lg text-nude">
-          Beleza, cuidado e atenção aos detalhes, do penteado à maquiagem, com espaço para a mãe e as madrinhas se arrumarem junto com você.
-        </Reveal>
-      </div>
-
       {desktop && !reduce ? <Timeline /> : <Stacked />}
 
-      <div ref={gal} className="wrap grid grid-cols-6 gap-4 pt-24 md:grid-cols-12 md:gap-6">
-        {mosaic.map((m) => (
-          <div key={m.p} data-speed={m.speed} className={`mosaic-item ${m.cls}`}>
-            <Photo name={m.p} className="arch h-full w-full" />
-          </div>
-        ))}
-      </div>
+      {shown.length > 0 && (
+        <div ref={gal} className="wrap flex justify-center gap-6 pb-16 pt-20">
+          {shown.map((k, i) => (
+            <div key={k} data-speed={i % 2 ? 30 : -30} className="mosaic-item aspect-[3/4] w-full max-w-sm">
+              <Photo name={k} small className="arch h-full w-full" />
+            </div>
+          ))}
+        </div>
+      )}
 
-      <div className="wrap flex justify-center py-[var(--section)]">
+      <div className="wrap flex flex-col items-center gap-6 pb-[var(--section)] pt-16 text-center">
+        <MaskLines as="p" className="font-display text-4xl sm:text-5xl" lines={[<>Vamos conversar sobre <em>o seu dia?</em></>]} />
         <Magnetic><button className="btn btn-primary" onClick={() => openBooking({ service: "dia-da-noiva" })}>Quero agendar meu teste</button></Magnetic>
       </div>
     </section>

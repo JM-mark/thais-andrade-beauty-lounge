@@ -3,15 +3,13 @@
 import { useRef } from "react";
 import { Photo } from "../Photo";
 import { MaskLines } from "../motion";
-import type { PhotoKey } from "@/content/photos";
+import { has, spaceGallery } from "@/content/photos";
 
-// TODO substituir pelas fotos reais do espaço
-const items: PhotoKey[] = ["salon", "stylist", "counter", "curls", "brunette", "brush"];
-
-/** Galeria arrastável com snap. Toque usa a rolagem nativa; mouse arrasta. */
+/** Galeria arrastável com snap, só com fotos reais do ambiente. Toque usa a rolagem nativa; mouse arrasta. */
 export function Space() {
   const ref = useRef<HTMLDivElement>(null);
   const drag = useRef({ on: false, x: 0, left: 0 });
+  const items = spaceGallery.filter((g) => has(g.key));
 
   const down = (e: React.PointerEvent) => {
     if (e.pointerType !== "mouse") return;
@@ -28,6 +26,7 @@ export function Space() {
     ref.current!.style.scrollSnapType = "";
   };
 
+  if (!items.length) return null;
   return (
     <section id="espaco" className="section overflow-hidden">
       <div className="wrap">
@@ -39,10 +38,11 @@ export function Space() {
         onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerLeave={up} onDragStart={(e) => e.preventDefault()}
         className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-[var(--gutter)] pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {items.map((p, i) => (
-          <div key={p} className={`snap-center shrink-0 select-none ${i % 2 ? "mt-12" : ""}`}>
-            <Photo name={p} className="arch aspect-[3/4] w-[72vw] sm:w-[22rem]" imgClassName="pointer-events-none" />
-          </div>
+        {items.map((g, i) => (
+          <figure key={g.key} className={`snap-center shrink-0 select-none ${i % 2 ? "mt-12" : ""}`}>
+            <Photo name={g.key} small className="arch aspect-[3/4] w-[72vw] sm:w-[22rem]" imgClassName="pointer-events-none" />
+            <figcaption className="eyebrow mt-3">{g.caption}</figcaption>
+          </figure>
         ))}
         <div className="w-[var(--gutter)] shrink-0" />
       </div>

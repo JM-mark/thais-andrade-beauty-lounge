@@ -1,13 +1,16 @@
 import { SITE, wa } from "@/config";
+import { has } from "@/content/photos";
+import { Photo } from "../Photo";
 import { MaskLines, Reveal } from "../motion";
 
 export function Location() {
+  const facade = has("fachada");
   return (
     <section id="local" className="section wrap grid gap-12 lg:grid-cols-12">
       <div className="lg:col-span-5">
         <p className="eyebrow mb-4">Onde estamos</p>
         <MaskLines className="h2" lines={[<>Venha nos</>, <><em>visitar</em></>]} />
-        <Reveal className="mt-8 space-y-4 text-lg">
+        <Reveal className="mt-8 space-y-4 text-[1.0625rem]">
           <p>{SITE.address}</p>
           <p className="text-ink-soft">{SITE.hours}</p> {/* TODO confirmar horário */}
           <p>{SITE.phoneDisplay}</p>
@@ -16,9 +19,15 @@ export function Location() {
             <a className="btn btn-ghost" href={wa()} target="_blank" rel="noopener noreferrer">WhatsApp</a>
           </div>
         </Reveal>
+        {facade && (
+          <Reveal className="mt-10">
+            <Photo name="fachada" small className="aspect-[4/3] w-full max-w-md rounded-[1.5rem]" />
+            <p className="eyebrow mt-3">Procure pelo portão branco com a nossa placa</p>
+          </Reveal>
+        )}
       </div>
       <Reveal className="lg:col-span-7">
-        <div className="arch aspect-[4/5] w-full border border-rosegold/50 sm:aspect-[16/11] sm:rounded-[2rem] sm:[border-radius:2rem]">
+        <div className="aspect-[4/5] w-full overflow-hidden rounded-[2rem] border border-rosegold/50 sm:aspect-[16/11]">
           <iframe title="Mapa: Thaís Andrade Beauty Lounge" src={SITE.mapsEmbed} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
             className="h-full w-full border-0 grayscale-[35%]" />
         </div>

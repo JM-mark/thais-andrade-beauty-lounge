@@ -5,14 +5,11 @@ import { Photo } from "../Photo";
 import { Reveal, MaskLines } from "../motion";
 import { gsap, prefersReduced } from "@/lib/gsap";
 import { SITE } from "@/config";
-import type { PhotoKey } from "@/content/photos";
+import { instagramPosts } from "@/content/photos";
 
 // TODO inserir trechos reais das avaliações do Google, com autorização. Vazio por padrão.
 type Review = { author: string; text: string };
 const reviews: Review[] = [];
-
-// TODO trocar pelos posts reais do Instagram do salão
-const grid: PhotoKey[] = ["updo", "makeup", "blonde", "brideBack", "brow", "waves"];
 
 export function Proof() {
   const num = useRef<HTMLSpanElement>(null);
@@ -60,13 +57,17 @@ export function Proof() {
         <h3 className="font-display text-4xl">No <em>Instagram</em></h3>
         <a className="btn btn-primary" href={SITE.instagram} target="_blank" rel="noopener noreferrer">{SITE.instagramHandle}</a>
       </div>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {grid.map((p) => (
-          <a key={p} href={SITE.instagram} target="_blank" rel="noopener noreferrer" aria-label="Ver no Instagram" className="group block overflow-hidden">
-            <Photo name={p} width={800} className="aspect-square w-full" imgClassName="transition-transform duration-700 ease-[var(--ease-lux)] group-hover:scale-105" />
-          </a>
-        ))}
-      </div>
+      {instagramPosts.length > 0 ? (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {instagramPosts.map((p) => (
+            <a key={p.url} href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`Ver post no Instagram: ${p.alt}`} className="group block overflow-hidden">
+              <Photo src={p.src} alt={p.alt} className="aspect-square w-full" imgClassName="transition-transform duration-700 ease-[var(--ease-lux)] group-hover:scale-105" />
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p className="max-w-md text-[1.0625rem] text-ink-soft">Veja os trabalhos e os bastidores do salão no nosso Instagram.</p>
+      )}
     </section>
   );
 }

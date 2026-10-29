@@ -6,12 +6,13 @@ import { Logo } from "./Logo";
 import { Magnetic } from "./motion";
 import { useBooking } from "./BookingProvider";
 import { getLenis } from "@/lib/gsap";
+import { has, spaceGallery } from "@/content/photos";
 
 const links = [
   ["Serviços", "#servicos"],
   ["Dia da Noiva", "#noiva"],
   ["Equipe", "#equipe"],
-  ["O espaço", "#espaco"],
+  ...(spaceGallery.some((g) => has(g.key)) ? ([["O espaço", "#espaco"]] as const) : []),
   ["Avaliações", "#avaliacoes"],
   ["Agendar", "#agendar"],
   ["Onde estamos", "#local"],
