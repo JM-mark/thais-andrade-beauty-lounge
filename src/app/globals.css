@@ -108,6 +108,7 @@ body {
 
   .arch { border-radius: 999px 999px 0 0; overflow: hidden; }
   .chip {
+    min-height: 44px;
     border: 1px solid rgba(30, 21, 23, 0.25); border-radius: 999px; padding: 0.55rem 1.1rem;
     font-size: 0.9rem; transition: all 0.3s var(--ease-lux); cursor: pointer; background: transparent; color: var(--color-ink);
   }
@@ -138,19 +139,13 @@ body::after {
    data-intro (definido por script inline no <head>): "first" = intro vai rodar, "seen" = já rodou nesta sessão. */
 html { --hero-delay: 0.05s; }
 html[data-intro="first"] { --hero-delay: 1.2s; }
-@keyframes heroCurtain { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 100% 0); } }
-@keyframes heroZoom { from { transform: scale(1.08); } to { transform: scale(1); } }
 @keyframes lineUp { from { transform: translateY(115%); } to { transform: translateY(0); } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 @keyframes photoIn { from { opacity: 0; } to { opacity: 1; } }
-/* A foto fica pintada desde o início (bom para LCP); uma cortina marfim sobe e revela de baixo para cima. */
-.hero-media { position: relative; overflow: hidden; border-radius: 999px 999px 0 0; }
-.hero-media::after { content: ""; position: absolute; inset: 0; z-index: 2; background: var(--color-ivory); animation: heroCurtain 1.3s var(--ease-lux) both; animation-delay: var(--hero-delay); }
-.hero-zoom { animation: heroZoom 2.4s ease-out both; animation-delay: var(--hero-delay); }
 .mask-hero { animation: lineUp 1.1s var(--ease-lux) both; }
 .hero-fade { animation: fadeUp 1s var(--ease-lux) both; animation-delay: calc(var(--hero-delay) + 0.45s); }
 .photo-in { animation: photoIn 0.6s var(--ease-lux) both; }
-@media (prefers-reduced-motion: reduce) { .hero-zoom, .mask-hero, .hero-fade, .photo-in { animation: none; } .hero-media::after { display: none; } }
+@media (prefers-reduced-motion: reduce) { .mask-hero, .hero-fade, .photo-in { animation: none; } }
 
 /* Transições suaves: o bloco vinho entra e sai em curva, sem corte seco entre as cores. */
 .curve-both, .curve-top { --curve: clamp(28px, 4.5vw, 64px); }
@@ -197,3 +192,16 @@ html.has-cursor [data-native-cursor] button:disabled, html.has-cursor [role="dia
 /* Vitrine nude com borda superior em curva (sem corte seco com o marfim) */
 .curve-nude { --curve: clamp(28px, 4.5vw, 64px); }
 .curve-nude::before { content: ""; position: absolute; left: 0; right: 0; top: 1px; height: var(--curve); background: var(--color-nude); transform: translateY(-100%); border-radius: 50% 50% 0 0 / 100% 100% 0 0; pointer-events: none; }
+
+/* Hero em vídeo: o vídeo entra em fade sobre o poster; véu marfim mais opaco à esquerda para o título ficar legível (AA) */
+.hero-video { opacity: 0; transition: opacity 1.2s var(--ease-lux); }
+.hero-video.is-on { opacity: 1; }
+.hero-veil { background: linear-gradient(90deg, rgba(247, 242, 236, 0.94) 0%, rgba(247, 242, 236, 0.84) 34%, rgba(247, 242, 236, 0.3) 66%, rgba(247, 242, 236, 0) 100%); }
+@media (max-width: 767px) {
+  .hero-veil { background: linear-gradient(0deg, rgba(247, 242, 236, 0.97) 0%, rgba(247, 242, 236, 0.9) 45%, rgba(247, 242, 236, 0.25) 78%, rgba(247, 242, 236, 0) 100%); }
+}
+
+/* Intro pintada no HTML: some sozinha na volta à página e, se o JavaScript demorar, sai em CSS depois de 3s. */
+html[data-intro="seen"] .intro { display: none; }
+@keyframes introSafety { to { opacity: 0; visibility: hidden; } }
+.intro { animation: introSafety 0.5s ease 3s forwards; }

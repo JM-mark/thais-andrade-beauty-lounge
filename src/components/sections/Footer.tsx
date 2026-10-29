@@ -18,7 +18,7 @@ export function Footer() {
             ))}
           </nav>
           <div className="col-span-12 space-y-2 text-nude sm:col-span-6 lg:col-span-4">
-            <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" className="block hover:text-rosegold">{SITE.instagramHandle}</a>
+            <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center hover:text-rosegold">{SITE.instagramHandle}</a>
             <p>{SITE.address}</p>
             <p>{SITE.phoneDisplay}</p>
           </div>

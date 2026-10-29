@@ -57,3 +57,12 @@ Somente fotos reais do salão (Google Maps "Pelo proprietário" e Instagram). Tr
 - **Formas:** arco só no hero e na galeria do espaço; vitrine, Instagram e fachada em retângulos de 24/16 px.
 - **Botão único:** pílula, Jost 500, 13 px, caixa alta, tracking 0,14em, 52 px de altura.
 - **Intro:** logo completa com brilho metálico (900 ms), cortina sobe; ≤ 1,2 s, só na primeira visita da sessão e só se a página carregou rápido. O hero é pré-carregado em paralelo e a revelação dele é CSS.
+
+## Revisão 3: motion e regras novas
+- **Hero:** vídeo de fundo em tela cheia (cabelo sendo escovado, sem rosto), loop sem emenda, véu marfim da esquerda (opaco) para a direita (transparente) com contraste AA, grão leve. Pausa fora da tela e com a aba oculta; reduced-motion/saveData: só o poster. Ao rolar: zoom 1 → 1.08 e leve escurecimento.
+- **Marquee:** Jost 500 13px, caixa alta, tracking 0,3em, tinta a 70%, losango rose gold de 5px, hairlines, ~64px, 45s por ciclo constante, pausa no hover, fades de 80px; parado e centralizado com reduced-motion. Só CSS.
+- **Espaço:** bento alinhado ao container (foto de maior resolução grande, 5/12 em 2 linhas), cantos de 20px, gap de 16px, legenda dentro da foto; celular: carrossel com snap e pontinhos. Sem arcos (arcos só no hero antigo; hoje não há).
+- **Cursor:** 1 elemento fixed, translate3d em rAF (lerp 0,18), sem setState no movimento; ponto 8px, anel 44px em links/botões, disco 72px "Arraste"; cursor nativo em campos, calendário, agendamento e modal; desligado sem hover, com reduced-motion e abaixo de 1024px.
+- **Avaliação:** nunca citar o número de avaliações; só "5 estrelas".
+- **Agendamento:** sem escolha de profissional; os nomes ficam na faixa "Quem cuida de você" (sem botões). Pedido sempre para o WhatsApp único.
+- **Intro:** só na primeira visita da sessão; logo oficial pequena (para não virar o LCP) com brilho metálico e cortina.

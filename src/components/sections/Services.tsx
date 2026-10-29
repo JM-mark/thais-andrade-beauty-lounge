@@ -15,8 +15,8 @@ import { useDesktop } from "@/lib/useDesktop";
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /** Foto real do serviço; se ainda faltar foto boa, painel com número e um detalhe fino. */
-function Visual({ s, i, sizes, priority = false }: { s: Service; i: number; sizes: string; priority?: boolean }) {
-  if (has(s.photo)) return <Photo name={s.photo} sizes={sizes} priority={priority} objectPosition={s.pos} className="h-full w-full" />;
+function Visual({ s, i, sizes, priority = false, eager = false }: { s: Service; i: number; sizes: string; priority?: boolean; eager?: boolean }) {
+  if (has(s.photo)) return <Photo name={s.photo} sizes={sizes} priority={priority} eager={eager} objectPosition={s.pos} className="h-full w-full" />;
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center bg-gradient-to-b from-nude to-[#d8bfae]" role="img" aria-label={s.short}>
       <svg viewBox="0 0 60 60" className="mb-4 h-10 w-10 text-rosegold" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.2">
@@ -122,7 +122,7 @@ function Pinned() {
         <div className="card-rect relative col-span-4 h-[min(72%,460px)] w-[340px] justify-self-end">
           {services.map((s, i) => (
             <div key={s.id} className={`sv-photo sv-photo-${i} absolute inset-0`} style={{ zIndex: i }}>
-              <Visual s={s} i={i} sizes="340px" priority={i === 0} />
+              <Visual s={s} i={i} sizes="340px" priority={i === 0} eager />
             </div>
           ))}
         </div>

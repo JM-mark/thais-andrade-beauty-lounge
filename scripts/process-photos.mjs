@@ -19,7 +19,7 @@ const jobs = [
   [".raw/ig/ta-ig-cabelos-ondas.jpg", "ondas-1"],
   [".raw/ig/ta-ig-mechas-morena.jpg", "mechas-1"],
   [".raw/ig/ta-ig-maquiagem.jpg", "maquiagem-1"],
-  [".raw/ig/ta-ig-sobrancelha2.jpg", "sobrancelha-1"],
+  [".raw/ig/ta-ig-sobrancelha2.jpg", "sobrancelha-1", 180], // o post foi filmado de cabeça para baixo
   [".raw/ig/ta-ig-grid-1-loiro.jpg", "ig-1"],
   [".raw/ig/ta-ig-grid-2-progressiva.jpg", "ig-2"],
   [".raw/ig/ta-ig-grid-3-ruivo.jpg", "ig-3"],
@@ -30,15 +30,15 @@ const jobs = [
 ];
 
 // Tratamento leve e igual em todas: calor sutil, saturação 0.92, contraste +4%, fade nos pretos.
-const grade = (img) => img.rotate().modulate({ saturation: 0.92 }).linear([1.055, 1.04, 1.025], [1, 1, 1]);
+const grade = (img, rot) => (rot ? img.rotate(rot) : img.rotate()).modulate({ saturation: 0.92 }).linear([1.055, 1.04, 1.025], [1, 1, 1]);
 
 const manifest = {};
-for (const [src, name] of jobs) {
-  const full = await grade(sharp(src)).resize({ width: 2000, height: 2000, fit: "inside", withoutEnlargement: true }).webp({ quality: 82 }).toFile(`${OUT}/${name}.webp`);
-  await grade(sharp(src)).resize({ width: 900, withoutEnlargement: true }).webp({ quality: 76 }).toFile(`${OUT}/${name}-md.webp`);
-  await grade(sharp(src)).resize({ width: 480, withoutEnlargement: true }).webp({ quality: 74 }).toFile(`${OUT}/${name}-sm.webp`);
+for (const [src, name, rot] of jobs) {
+  const full = await grade(sharp(src), rot).resize({ width: 2000, height: 2000, fit: "inside", withoutEnlargement: true }).webp({ quality: 82 }).toFile(`${OUT}/${name}.webp`);
+  await grade(sharp(src), rot).resize({ width: 900, withoutEnlargement: true }).webp({ quality: 76 }).toFile(`${OUT}/${name}-md.webp`);
+  await grade(sharp(src), rot).resize({ width: 480, withoutEnlargement: true }).webp({ quality: 74 }).toFile(`${OUT}/${name}-sm.webp`);
   const smMeta = await sharp(`${OUT}/${name}-sm.webp`).metadata();
-  const lq = await grade(sharp(src)).resize({ width: 24 }).blur(2).webp({ quality: 50 }).toBuffer();
+  const lq = await grade(sharp(src), rot).resize({ width: 24 }).blur(2).webp({ quality: 50 }).toBuffer();
   const small = await sharp(`${OUT}/${name}-md.webp`).metadata();
   manifest[name] = { w: full.width, h: full.height, wMd: small.width, wSm: smMeta.width, lqip: `data:image/webp;base64,${lq.toString("base64")}` };
   console.log(name, full.width + "x" + full.height);

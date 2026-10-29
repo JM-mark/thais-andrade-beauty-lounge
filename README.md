@@ -73,12 +73,20 @@ Todas as fotos do site foram retiradas do Google Maps (aba "Pelo proprietário")
 
 Hero tipográfico: a melhor foto de noiva disponível tem 1200 px no lado menor (abaixo de 1400). Quando o salão enviar o original, defina `heroPhoto` em `src/components/sections/Hero.tsx`.
 
+
+
+## Vídeo do hero
+- Clipe do **Pexels** (licença Pexels, gratuita para uso comercial, sem atribuição obrigatória): "A woman brushing her long hair", ID 8955484 — https://www.pexels.com/video/a-woman-brushing-her-long-hair-8955484/ (licença: https://www.pexels.com/license/).
+- Trecho de 9 s (31–40 s), cabelo e mão, sem rosto; loop sem emenda com fusão do fim para o começo. Gerado por `node scripts/process-video.mjs` (ffmpeg via `ffmpeg-static`) a partir de `.raw/video/pexels-8955484.mp4`.
+- Arquivos em `public/hero/`: desktop 1080p (MP4 2,5 MB, WebM 2,7 MB) e celular 540x960 com recorte vertical, 7 s (MP4 0,64 MB, WebM 0,73 MB), mais os posters. Com `prefers-reduced-motion` ou economia de dados, só o poster.
+- Se o salão tiver um vídeo próprio (cabelo em câmera lenta, sem rosto), é só trocar o clipe bruto e rodar o script.
+
 ## Fotos que precisam do original da cliente
-As fotos vêm do Google Maps/Instagram do salão em tamanho reduzido. Pedir o original (e autorização das clientes) de:
-- `noiva-buque` (hero): 1200×1600 px. Ideal: 2000 px ou mais no lado menor.
-- `maquiagem-1` (640×796) e `sobrancelha-1` (640×1136): só entram no palco pequeno (340 px).
-- `ondas-1`, `mechas-1`, `esteticaMaca` e as fotos do espaço (720 px): servem, mas ganham nitidez com o original.
-- `noivaVitrine` (card "Dia da Noiva"): 720×1280, do Instagram do salão; pedir o original.
+As fotos vêm do Google Maps/Instagram do salão em tamanho reduzido. Pedir o original (e a autorização das clientes que aparecem) de:
+- `noiva-buque` (card Dia da Noiva): 1200×1600 px; ideal 2000 px ou mais.
+- `maquiagem-1` (640×796) e `sobrancelha-1` (640×1138): nítidas só até ~320 px em tela 2×.
+- Sala de espera, Recepção e Café (720 px): no bento ficam borradas em telas 2×. A Área de cabelo (2000 px) está boa.
+- Logo: a atual foi extraída de um print do WhatsApp; pedir PDF/SVG/PNG em alta.
 
 ## Performance (medido localmente)
-Lighthouse mobile (simulado, primeira visita): Acessibilidade 100, Performance 73-74 (LCP observado ~0,3 s; o simulado sobe por causa da intro e do JavaScript da primeira visita). Sem a intro, a mesma página marca 97. Peso da página inicial no celular: ~1,3 MB; foto do hero: ~90 KB.
+Lighthouse mobile (simulado, primeira visita, com a intro): Performance 97-98 na maioria das medições (uma em três deu 66 por um pico de FCP de 5 s no teste), Acessibilidade 100. Peso da primeira carga no celular: ~2,0 MB (vídeo de celular ~0,7 MB). O LCP é o subtítulo do hero, pintado no primeiro quadro: o Chrome ignora imagens que cobrem a tela toda como candidatas de LCP, então o poster do vídeo não conta. Por isso o subtítulo não tem animação de entrada e a logo da intro é pequena.

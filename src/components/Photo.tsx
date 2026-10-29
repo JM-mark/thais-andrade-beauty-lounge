@@ -10,6 +10,7 @@ type Props = {
   className?: string;
   imgClassName?: string;
   priority?: boolean; // eager + fetchPriority alto
+  eager?: boolean; // eager sem prioridade alta (ex.: fotos empilhadas no palco da vitrine)
   sizes?: string;
   objectPosition?: string;
 };
@@ -18,7 +19,7 @@ type Props = {
  * Foto real com placeholder LQIP (blur), srcset e fade-in só depois de decode().
  * Sem foto ou com erro, mostra só o placeholder nude (nunca foto de banco).
  */
-export function Photo({ name, entry, className = "", imgClassName = "", priority = false, sizes = "100vw", objectPosition }: Props) {
+export function Photo({ name, entry, className = "", imgClassName = "", priority = false, eager = false, sizes = "100vw", objectPosition }: Props) {
   const p = entry ?? (name ? photos[name] : undefined);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -51,7 +52,7 @@ export function Photo({ name, entry, className = "", imgClassName = "", priority
           width={p.w}
           height={p.h}
           alt={p.alt}
-          loading={priority ? "eager" : "lazy"}
+          loading={priority || eager ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "auto"}
           decoding="async"
           onLoad={markReady}

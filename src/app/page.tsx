@@ -1,3 +1,5 @@
+import { preload } from "react-dom";
+import { asset } from "@/config";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/sections/Hero";
 import { Marquee } from "@/components/sections/Marquee";
@@ -13,6 +15,9 @@ import { Footer } from "@/components/sections/Footer";
 import { FloatingBar } from "@/components/FloatingBar";
 
 export default function Home() {
+  // O poster do hero (LCP) começa a baixar já no HTML, em paralelo com a intro; o vídeo vem depois, no cliente.
+  preload(asset("/hero/poster-d.jpg"), { as: "image", fetchPriority: "high", media: "(min-width: 768px)" });
+  preload(asset("/hero/poster-m.jpg"), { as: "image", fetchPriority: "high", media: "(max-width: 767px)" });
   return (
     <>
       <Header />
