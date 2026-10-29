@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode, type ElementType, type CSSProperties } from "react";
-import { gsap, prefersReduced, onIntroDone } from "@/lib/gsap";
+import { gsap, prefersReduced } from "@/lib/gsap";
 
 /** Título revelado linha a linha por máscara. */
 export function MaskLines({
@@ -10,24 +10,24 @@ export function MaskLines({
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
     const el = ref.current;
-    if (!el || prefersReduced()) return;
+    if (!el || afterIntro || prefersReduced()) return; // afterIntro: animação 100% CSS (.mask-hero)
     const targets = el.querySelectorAll(".mask-line");
     gsap.set(targets, { yPercent: 115 });
     let tween: gsap.core.Tween | undefined;
     const run = () => {
       tween = gsap.to(targets, {
         yPercent: 0, duration: 1.1, ease: "power4.out", stagger: 0.12, delay,
-        scrollTrigger: afterIntro ? undefined : { trigger: el, start: "top 88%", once: true },
+        scrollTrigger: { trigger: el, start: "top 88%", once: true },
       });
     };
-    const off = afterIntro ? onIntroDone(run) : (run(), () => {});
-    return () => { off(); tween?.scrollTrigger?.kill(); tween?.kill(); gsap.set(targets, { clearProps: "all" }); };
+    run();
+    return () => { tween?.scrollTrigger?.kill(); tween?.kill(); gsap.set(targets, { clearProps: "all" }); };
   }, [afterIntro, delay]);
   return (
     <Tag ref={ref} className={className}>
       {lines.map((l, i) => (
         <span key={i} className="block overflow-hidden px-[0.06em] pb-[0.1em] -mx-[0.06em]">
-          <span className="mask-line block will-change-transform">{l}</span>
+          <span className={`mask-line block will-change-transform ${afterIntro ? "mask-hero" : ""}`} style={afterIntro ? { animationDelay: `calc(var(--hero-delay, 0s) + ${i * 0.12}s)` } : undefined}>{l}</span>
         </span>
       ))}
     </Tag>

@@ -23,7 +23,10 @@ export const metadata: Metadata = {
     images: [{ url: `${BASE}/og.jpg`, width: 1200, height: 630, alt: SITE.name }],
   },
   twitter: { card: "summary_large_image", title, description, images: [`${BASE}/og.jpg`] },
-  icons: { icon: `${BASE}/icon.svg` },
+  icons: {
+    icon: [{ url: `${BASE}/icon-32.png`, sizes: "32x32", type: "image/png" }, { url: `${BASE}/icon-192.png`, sizes: "192x192", type: "image/png" }],
+    apple: `${BASE}/apple-touch-icon.png`,
+  },
 };
 
 export const viewport: Viewport = { themeColor: "#F7F2EC", width: "device-width", initialScale: 1 };
@@ -48,7 +51,10 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${cormorant.variable} ${jost.variable} ${pinyon.variable}`}>
+    <html lang="pt-BR" suppressHydrationWarning className={`${cormorant.variable} ${jost.variable} ${pinyon.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: "try{document.documentElement.dataset.intro=sessionStorage.getItem('intro')==='1'?'seen':'first'}catch(e){document.documentElement.dataset.intro='first'}" }} />
+      </head>
       <body>
         <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-marsala focus:px-4 focus:py-2 focus:text-ivory">Ir para o conteúdo</a>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

@@ -20,3 +20,6 @@ export const SITE = {
 
 export const wa = (text?: string) =>
   `https://wa.me/${SITE.WHATSAPP_NUMBER}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
+
+/** Prefixa o basePath em caminhos locais (/fotos, /brand). Seguro em componentes de servidor e de cliente. */
+export const asset = (u: string) => (u.startsWith("/") ? `${SITE.basePath}${u}` : u);

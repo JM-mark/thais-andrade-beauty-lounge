@@ -49,3 +49,11 @@ Reveal por máscara linha a linha, Ken Burns lento no hero, marquee reativo ao s
 
 ## Fotografia
 Somente fotos reais do salão (Google Maps "Pelo proprietário" e Instagram). Tratamento único aplicado em `scripts/process-photos.mjs`: calor sutil, saturação 0,92, contraste +4% e leve fade nos pretos, para parecer um ensaio só sem esconder que é o salão real. Até 14 fotos no site, sem repetição entre seções. Sem foto de qualidade, a seção usa tipografia (número grande, monograma ou cartões de texto), nunca foto de banco. Equipe em cards tipográficos.
+
+## Revisão 2: logo, grid e ritmo
+- **Logo oficial** (monograma "TA" com mecha de cabelo, marsala metálico): `public/brand/` (originais) e `public/brand/web/` (leves). Header desktop: horizontal 44 px; celular: só o monograma (40 px). Fundos vinho (Noiva, footer) usam as versões `-claro`. Não redesenhar nem vetorizar. Extraída de um print do WhatsApp: pedir o original à cliente.
+- **Container e grid:** um único container de 1240 px, gutters 24/48 px, grid de 12 colunas (`.wrap`, `.grid12`). Espaço entre seções `clamp(88px, 12vw, 160px)`. Cabeçalho de seção único (`SectionHead`): rótulo com traço + título serif + apoio, à esquerda.
+- **Ritmo de fundos:** Hero marfim → Marquee marfim → Manifesto marfim → Serviços nude → Noiva vinho (única seção escura) → Espaço nude → Avaliações + Instagram marfim → Agendamento marfim → FAQ marfim → Localização marfim → Footer vinho.
+- **Formas:** arco só no hero e na galeria do espaço; vitrine, Instagram e fachada em retângulos de 24/16 px.
+- **Botão único:** pílula, Jost 500, 13 px, caixa alta, tracking 0,14em, 52 px de altura.
+- **Intro:** logo completa com brilho metálico (900 ms), cortina sobe; ≤ 1,2 s, só na primeira visita da sessão e só se a página carregou rápido. O hero é pré-carregado em paralelo e a revelação dele é CSS.

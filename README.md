@@ -20,13 +20,13 @@ npm run lint
 |---|---|
 | WhatsApp, endereço, horário, nota do Google, links | `src/config.ts` |
 | Serviços e textos | `src/content/services.ts` |
-| Equipe (só nomes; todo pedido vai para o WhatsApp único de `src/config.ts`) | `src/content/team.ts` |
+| Equipe ("Quem cuida de você"; todo pedido vai para o WhatsApp único de `src/config.ts`) | `src/content/team.ts` |
 | Fotos reais (Maps/Instagram do salão) | `src/content/photos.ts`, arquivos em `public/fotos/`; reprocessar com `node scripts/process-photos.mjs` |
 | FAQ | `src/content/faq.ts` |
 | Dias e horários do agendamento (mock) | `src/lib/availability.ts` |
 | Mensagem do WhatsApp e arquivo `.ics` | `src/lib/booking.ts` |
 | Cores, fontes, espaçamentos | `src/app/globals.css` e `DESIGN.md` |
-| Logo | `public/brand/` e `src/components/Logo.tsx` (wordmark provisório) |
+| Logo oficial | `public/brand/` (originais) e `public/brand/web/` (versões leves, geradas por `scripts/process-photos.mjs`) |
 
 ## Variáveis de ambiente
 
@@ -50,11 +50,11 @@ O workflow `.github/workflows/deploy.yml` faz o build com o basePath do reposit�
 
 ## Como o agendamento funciona
 
-Stepper em 3 etapas (serviço, data/horário, dados) que roda 100% no navegador. Ao confirmar, abre `wa.me/<número>?text=...` com a mensagem pronta. A interface sempre diz que é um **pedido**; o salão confirma pelo WhatsApp. Há botão "Adicionar à agenda" (`.ics`). Se `WHATSAPP_NUMBER` ficar vazio, o site copia a mensagem e abre o Linktree do salão.
+Stepper em 4 etapas (serviço, profissional como preferência, data/horário, dados) que roda 100% no navegador. Ao confirmar, abre `wa.me/<número>?text=...` com a mensagem pronta. A interface sempre diz que é um **pedido**; o salão confirma pelo WhatsApp. Há botão "Adicionar à agenda" (`.ics`). Se `WHATSAPP_NUMBER` ficar vazio, o site copia a mensagem e abre o Linktree do salão.
 
 ## Lista de TODOs que dependem do salão
 
-- Logo em alta resolução (substituir o wordmark provisório; o `public/og.jpg` é um recorte da foto da noiva e pode ser refeito com o hero final)
+- **Logo original (PDF/SVG/PNG em alta).** A logo atual foi extraída de um print do WhatsApp; pedir o arquivo original à cliente.
 - Fotos em resolução original do espaço, da equipe e dos trabalhos (hoje vêm do Google Maps e do Instagram do salão, em tamanho reduzido)
 - Confirmar que (19) 98717-2370 é o WhatsApp principal
 - Horário de funcionamento e dias de atendimento (hoje: domingo fechado, horários mock)
@@ -74,3 +74,13 @@ Todas as fotos do site foram retiradas do Google Maps (aba "Pelo proprietário")
 **Fotos de clientes retiradas do Instagram/Google do salão. Confirmar autorização antes da publicação oficial.**
 
 Hero tipográfico: a melhor foto de noiva disponível tem 1200 px no lado menor (abaixo de 1400). Quando o salão enviar o original, defina `heroPhoto` em `src/components/sections/Hero.tsx`.
+
+## Fotos que precisam do original da cliente
+As fotos vêm do Google Maps/Instagram do salão em tamanho reduzido. Pedir o original (e autorização das clientes) de:
+- `noiva-buque` (hero): 1200×1600 px. Ideal: 2000 px ou mais no lado menor.
+- `maquiagem-1` (640×796) e `sobrancelha-1` (640×1136): só entram no palco pequeno (340 px).
+- `ondas-1`, `mechas-1`, `esteticaMaca` e as fotos do espaço (720 px): servem, mas ganham nitidez com o original.
+- **Falta uma foto de noiva real** (em alta) para o card "Dia da Noiva" da vitrine: ele mostra o painel com número até a chave `noivaVitrine` ser preenchida em `src/content/photos.ts`.
+
+## Performance (medido localmente)
+Lighthouse mobile (simulado, primeira visita): Acessibilidade 100, Performance 73-74 (LCP observado ~0,3 s; o simulado sobe por causa da intro e do JavaScript da primeira visita). Sem a intro, a mesma página marca 97. Peso da página inicial no celular: ~1,3 MB; foto do hero: ~90 KB.

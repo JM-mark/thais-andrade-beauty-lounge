@@ -4,15 +4,17 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { services, extraServices } from "@/content/services";
+import { team } from "@/content/team";
 import { slotsFor, isDayClosed } from "@/lib/availability";
 import { SITE } from "@/config";
 import {
   buildIcs, buildMessage, maskPhone, prettyDate, sendWebhook, whatsappUrl, type Booking,
 } from "@/lib/booking";
 
-export type Preset = { service?: string };
+export type Preset = { service?: string; pro?: string };
 
-const STEPS = ["Serviço", "Data e horário", "Seus dados"];
+const STEPS = ["Serviço", "Profissional", "Data e horário", "Seus dados"];
+const PRO_NONE = "Sem preferência";
 const WEEK = ["D", "S", "T", "Q", "Q", "S", "S"];
 const MONTHS = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
 
@@ -22,10 +24,12 @@ const iso = (d: Date) =>
 export function BookingFlow({ preset, onClose, dark = false }: { preset?: Preset; onClose?: () => void; dark?: boolean }) {
   const allServices = [...services.map((s) => ({ id: s.id, short: s.short })), ...extraServices.map((s) => ({ id: s.id, short: s.short }))];
   const initialSvc = preset?.service ? [preset.service] : [];
+  const initialPro = preset?.pro ? team.find((t) => t.id === preset.pro)?.name ?? "" : "";
 
-  const [step, setStep] = useState(initialSvc.length ? 1 : 0);
+  const [step, setStep] = useState(initialSvc.length ? (initialPro ? 2 : 1) : 0);
   const [dir, setDir] = useState(1);
   const [svc, setSvc] = useState<string[]>(initialSvc);
+  const [pro, setPro] = useState(initialPro);
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [wedding, setWedding] = useState("");
@@ -49,6 +53,7 @@ export function BookingFlow({ preset, onClose, dark = false }: { preset?: Preset
 
   const valid = [
     svc.length > 0,
+    pro !== "",
     !!date && !!time,
     name.trim().length >= 2 && phone.replace(/\D/g, "").length >= 10 && lgpd,
   ][step];
@@ -60,7 +65,7 @@ export function BookingFlow({ preset, onClose, dark = false }: { preset?: Preset
   const confirm = () => {
     const b: Booking = {
       services: svc.map((id) => allServices.find((s) => s.id === id)!.short),
-      date, time, name: name.trim(), phone, notes,
+      pro: pro || PRO_NONE, date, time, name: name.trim(), phone, notes,
       weddingDate: isNoiva && wedding ? wedding : undefined,
       people: isNoiva && people ? people : undefined,
     };
@@ -96,7 +101,7 @@ export function BookingFlow({ preset, onClose, dark = false }: { preset?: Preset
         <h3 className="mt-6 font-display text-4xl sm:text-5xl">Pedido <em>enviado</em></h3>
         <p className="mx-auto mt-3 max-w-md opacity-80">O salão confirma o horário com você pelo WhatsApp. Se a conversa não abriu, use o botão abaixo.</p>
         <dl className="mx-auto mt-8 max-w-md space-y-2 border-y border-rosegold/60 py-5 text-left text-[0.95rem]">
-          {[["Serviço", sent.services.join(" + ")], ["Data", `${prettyDate(sent.date)} às ${sent.time}`], ["Nome", sent.name]].map(([k, v]) => (
+          {[["Serviço", sent.services.join(" + ")], ["Profissional preferida", sent.pro], ["Data", `${prettyDate(sent.date)} às ${sent.time}`], ["Nome", sent.name]].map(([k, v]) => (
             <div key={k} className="flex justify-between gap-6"><dt className="eyebrow pt-1">{k}</dt><dd className="text-right">{v}</dd></div>
           ))}
         </dl>
@@ -111,7 +116,7 @@ export function BookingFlow({ preset, onClose, dark = false }: { preset?: Preset
 
   return (
     <div className={dark ? "on-dark" : ""}>
-      <div className="mb-8" aria-label={`Etapa ${step + 1} de 3`}>
+      <div className="mb-8" aria-label={`Etapa ${step + 1} de 4`}>
         <div className="flex justify-between">
           {STEPS.map((s, i) => (
             <span key={s} className={`eyebrow !text-[0.62rem] sm:!text-[0.72rem] ${i === step ? "!text-marsala font-medium" : ""} ${i > step ? "opacity-50" : ""}`}>
@@ -119,7 +124,7 @@ export function BookingFlow({ preset, onClose, dark = false }: { preset?: Preset
             </span>
           ))}
         </div>
-        <div className="mt-3 h-px bg-ink/15"><motion.div className="h-px bg-rosegold" animate={{ width: `${((step + 1) / 3) * 100}%` }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} /></div>
+        <div className="mt-3 h-px bg-ink/15"><motion.div className="h-px bg-rosegold" animate={{ width: `${((step + 1) / 4) * 100}%` }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} /></div>
         <p className="mt-4 font-display text-3xl sm:hidden">{STEPS[step]}</p>
       </div>
 
@@ -143,6 +148,17 @@ export function BookingFlow({ preset, onClose, dark = false }: { preset?: Preset
 
 
             {step === 1 && (
+              <div>
+                <p className="mb-4 opacity-75">Escolha com quem você prefere. O pedido vai para o WhatsApp do salão, que confirma o horário.</p>
+                <div role="radiogroup" aria-label="Profissional" className="flex flex-wrap gap-2.5">
+                  {[...team.map((t) => t.name), PRO_NONE].map((n) => (
+                    <button key={n} type="button" role="radio" aria-checked={pro === n} className="chip" onClick={() => setPro(n)}>{n}</button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {step === 2 && (
               <div className="grid gap-8 md:grid-cols-2">
                 <div>
                   <div className="mb-3 flex items-center justify-between">
@@ -186,7 +202,7 @@ export function BookingFlow({ preset, onClose, dark = false }: { preset?: Preset
               </div>
             )}
 
-            {step === 2 && (
+            {step === 3 && (
               <div className="space-y-6">
                 <label className="block"><span className="eyebrow">Nome</span>
                   <input className="field" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} /></label>
@@ -207,7 +223,7 @@ export function BookingFlow({ preset, onClose, dark = false }: { preset?: Preset
 
       <div className="mt-8 flex items-center justify-between gap-3">
         <button type="button" className="btn btn-ghost" onClick={() => go(step - 1)} style={{ visibility: step === 0 ? "hidden" : "visible" }}>Voltar</button>
-        {step < 2
+        {step < 3
           ? <button type="button" className="btn btn-primary disabled:opacity-40" disabled={!valid} onClick={() => go(step + 1)}>Continuar</button>
           : <button type="button" className="btn btn-primary disabled:opacity-40" disabled={!valid} onClick={confirm}>Enviar pelo WhatsApp</button>}
       </div>

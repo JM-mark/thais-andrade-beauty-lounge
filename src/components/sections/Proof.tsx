@@ -7,10 +7,9 @@ import { gsap, prefersReduced } from "@/lib/gsap";
 import { SITE } from "@/config";
 import { instagramPosts } from "@/content/photos";
 
-// TODO inserir trechos reais das avaliações do Google, com autorização. Vazio por padrão.
-type Review = { author: string; text: string };
-const reviews: Review[] = [];
+// TODO inserir trechos reais das avaliações do Google, com autorização. Vazio por padrão (sem depoimentos inventados).
 
+/** Avaliações + Instagram em uma seção compacta: nota à esquerda, grid 3×2 de posts reais à direita. */
 export function Proof() {
   const num = useRef<HTMLSpanElement>(null);
   const fmt = (n: number) => n.toFixed(1).replace(".", ",");
@@ -30,44 +29,33 @@ export function Proof() {
 
   return (
     <section id="avaliacoes" className="section wrap">
-      <div className="grid items-end gap-10 lg:grid-cols-12">
-        <div className="lg:col-span-7">
-          <p className="eyebrow mb-4">No Google</p>
-          <div className="flex items-baseline gap-4">
-            <span ref={num} className="font-display text-[clamp(7rem,24vw,18rem)] leading-[0.85] text-marsala">{fmt(SITE.rating.value)}</span>
-            <span className="text-[clamp(2rem,6vw,4rem)] text-rosegold" aria-label="5 estrelas">★</span>
+      <div className="grid12 items-start gap-y-12">
+        <div className="col-span-12 lg:col-span-5">
+          <p className="label">No Google</p>
+          <div className="mt-6 flex items-baseline gap-3">
+            <span ref={num} className="font-display text-[clamp(5rem,10vw,7.5rem)] leading-[0.9] text-marsala">{fmt(SITE.rating.value)}</span>
+            <span className="text-[clamp(1.5rem,3vw,2.25rem)] text-rosegold" role="img" aria-label="5 estrelas">★</span>
+          </div>
+          <MaskLines as="h2" className="mt-4 font-display text-3xl" lines={[<>{SITE.rating.count} avaliações <em>no Google</em></>]} />
+          <Reveal className="mt-8 flex flex-wrap gap-3">
+            <a className="btn btn-ghost" href={SITE.maps} target="_blank" rel="noopener noreferrer">Ler avaliações no Google</a>
+          </Reveal>
+        </div>
+
+        <div className="col-span-12 lg:col-span-7">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+            <h3 className="font-display text-3xl">No <em>Instagram</em></h3>
+            <a className="text-[13px] font-medium uppercase tracking-[0.14em] text-marsala underline underline-offset-8" href={SITE.instagram} target="_blank" rel="noopener noreferrer">{SITE.instagramHandle}</a>
+          </div>
+          <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+            {instagramPosts.map((p) => (
+              <a key={p.url} href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`Ver no Instagram: ${p.photo.alt}`} className="group block overflow-hidden rounded-2xl">
+                <Photo entry={p.photo} sizes="(min-width: 1024px) 200px, 30vw" className="aspect-[4/5] w-full" imgClassName="transition-transform duration-700 ease-[var(--ease-lux)] group-hover:scale-105" />
+              </a>
+            ))}
           </div>
         </div>
-        <Reveal className="lg:col-span-5">
-          <MaskLines as="p" className="font-display text-4xl" lines={[<>{SITE.rating.count} avaliações</>, <><em>no Google</em></>]} />
-          <a className="btn btn-ghost mt-6" href={SITE.maps} target="_blank" rel="noopener noreferrer">Ler avaliações no Google</a>
-        </Reveal>
       </div>
-
-      {reviews.length > 0 && (
-        <div className="mt-16 grid gap-8 md:grid-cols-3">
-          {reviews.map((r) => (
-            <figure key={r.author} className="border-t border-rosegold/60 pt-6"><blockquote className="font-display text-2xl">{r.text}</blockquote><figcaption className="eyebrow mt-3">{r.author}</figcaption></figure>
-          ))}
-        </div>
-      )}
-
-      <hr className="hairline my-20" />
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-        <h3 className="font-display text-4xl">No <em>Instagram</em></h3>
-        <a className="btn btn-primary" href={SITE.instagram} target="_blank" rel="noopener noreferrer">{SITE.instagramHandle}</a>
-      </div>
-      {instagramPosts.length > 0 ? (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {instagramPosts.map((p) => (
-            <a key={p.url} href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`Ver post no Instagram: ${p.alt}`} className="group block overflow-hidden">
-              <Photo src={p.src} alt={p.alt} className="aspect-square w-full" imgClassName="transition-transform duration-700 ease-[var(--ease-lux)] group-hover:scale-105" />
-            </a>
-          ))}
-        </div>
-      ) : (
-        <p className="max-w-md text-[1.0625rem] text-ink-soft">Veja os trabalhos e os bastidores do salão no nosso Instagram.</p>
-      )}
     </section>
   );
 }

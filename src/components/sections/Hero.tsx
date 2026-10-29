@@ -2,68 +2,63 @@
 
 import { useEffect, useRef } from "react";
 import { Photo } from "../Photo";
-import { Monogram } from "../Logo";
 import { MaskLines, Magnetic } from "../motion";
 import { useBooking } from "../BookingProvider";
-import { gsap, prefersReduced, onIntroDone } from "@/lib/gsap";
-import { has, type PhotoKey } from "@/content/photos";
+import { gsap, prefersReduced } from "@/lib/gsap";
+import { HERO_PHOTO } from "@/content/photos";
 import { SITE, wa } from "@/config";
 
+const rating = `${SITE.rating.value.toFixed(1).replace(".", ",")}`;
+
 /**
- * Hero editorial: título à esquerda e uma foto real em arco à direita.
- * Se a foto real da noiva não tiver qualidade (veja photos.ts), vira hero tipográfico com o monograma "TA".
+ * Hero editorial: título à esquerda e a foto real da noiva em arco à direita (no celular: título, botões e depois a foto).
+ * A foto é pré-carregada no HTML (page.tsx) em paralelo com a intro, e a revelação (máscara + zoom 1.08 → 1)
+ * é 100% CSS, com atraso de 1 s só na primeira visita da sessão (para esperar a intro). Isso mantém o LCP baixo.
  */
 export function Hero() {
   const root = useRef<HTMLElement>(null);
   const media = useRef<HTMLDivElement>(null);
   const { openBooking } = useBooking();
-  // A melhor noiva disponível tem 1200px no lado menor (< 1400): hero tipográfico. Para usar foto, troque por uma chave de photos.ts.
-  const heroPhoto: PhotoKey | undefined = undefined;
-  const photo = has(heroPhoto);
 
   useEffect(() => {
     if (prefersReduced()) return;
     const ctx = gsap.context(() => {
-      gsap.from(".hero-fade", { opacity: 0, y: 24, duration: 1, delay: 0.9, stagger: 0.12, ease: "power3.out" });
-      gsap.fromTo(media.current, { clipPath: "inset(100% 0% 0% 0% round 999px 999px 0 0)" }, {
-        clipPath: "inset(0% 0% 0% 0% round 999px 999px 0 0)", duration: 1.4, delay: 0.6, ease: "power4.out",
-      });
       gsap.to(media.current, {
-        yPercent: -5, ease: "none",
+        yPercent: -4, ease: "none",
         scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
       });
-      const off = onIntroDone(() => gsap.to(".hero-ta .ta-stroke", { strokeDashoffset: 0, duration: 1.6, stagger: 0.2, ease: "power2.inOut" }));
-      return () => off();
     }, root);
     return () => ctx.revert();
   }, []);
 
+  const badge = (cls: string) => (
+    <p className={`hero-fade items-center gap-2 rounded-full border border-rosegold/70 px-4 py-2 text-sm ${cls}`}>
+      <span className="text-marsala">★</span> <strong className="font-medium">{rating}</strong> no Google · {SITE.rating.count} avaliações
+    </p>
+  );
+
   return (
-    <section id="topo" ref={root} className="relative overflow-hidden pt-[5.5rem] pb-12 lg:min-h-[100svh]">
-      <div className="wrap grid items-center gap-6 lg:min-h-[calc(100svh-7rem)] lg:grid-cols-12 lg:gap-10">
-        <div className="order-2 lg:order-1 lg:col-span-7">
-          <MaskLines as="h1" afterIntro className="display"
-            lines={[<>Sua nova fase</>, <><em>começa</em> <span className="script text-[1.15em]">aqui</span>.</>]} />
+    <section id="topo" ref={root} className="relative overflow-hidden pt-[5.5rem] pb-12 lg:flex lg:min-h-[100svh] lg:items-center">
+      <div className="wrap grid12 items-center gap-y-8">
+        <div className="col-span-12 lg:col-span-7">
+          <MaskLines as="h1" afterIntro className="display" lines={[<>Sua nova fase</>, <><em>começa</em> <span className="script text-[1.15em]">aqui</span>.</>]} />
           <p className="hero-fade mt-5 max-w-md text-[1.0625rem] text-ink">Dia da Noiva, cabelo, maquiagem e estética em Hortolândia.</p>
           <div className="hero-fade mt-7 flex flex-wrap gap-3">
             <Magnetic><button className="btn btn-primary" onClick={() => openBooking()}>Agendar horário</button></Magnetic>
             <Magnetic><a className="btn btn-ghost" href={wa("Olá! Vim pelo site e gostaria de falar com o salão.")} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a></Magnetic>
           </div>
-          <p className="hero-fade mt-7 inline-flex items-center gap-2 rounded-full border border-rosegold/70 px-4 py-2 text-sm">
-            <span className="text-marsala">★</span> <strong className="font-medium">{SITE.rating.value.toFixed(1).replace(".", ",")}</strong> no Google · {SITE.rating.count} avaliações
-          </p>
+          {badge("mt-7 hidden w-fit lg:inline-flex")}
         </div>
 
-        <div className="order-1 lg:order-2 lg:col-span-5">
-          <div ref={media} className="ml-auto h-[32svh] w-[min(52vw,14rem)] lg:mx-auto lg:h-[74svh] lg:w-full lg:max-w-[28rem]">
-            {photo ? (
-              <Photo name={heroPhoto} priority objectPosition="50% 20%" className="arch h-full w-full" />
-            ) : (
-              <div className="hero-ta arch flex h-full w-full items-center justify-center bg-gradient-to-b from-nude to-[#d8bfae]" aria-hidden="true">
-                <Monogram draw color="#7A2E3A" className="h-1/3 w-auto lg:h-1/4" />
+        <div className="col-span-12 lg:col-span-5">
+          <div ref={media} className="mx-auto h-[42svh] max-h-[460px] w-[70%] lg:h-[74svh] lg:max-h-none lg:w-full lg:max-w-[28rem]">
+            <div className="hero-media h-full w-full">
+              <div className="hero-zoom h-full w-full">
+                <Photo name={HERO_PHOTO} priority sizes="(min-width: 1024px) 450px, 70vw" objectPosition="center 30%" className="h-full w-full [border-radius:999px_999px_0_0]" />
               </div>
-            )}
+            </div>
           </div>
+          {badge("mx-auto mt-6 flex w-fit lg:hidden")}
         </div>
       </div>
     </section>
