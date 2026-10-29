@@ -6,7 +6,7 @@ import { Monogram } from "../Logo";
 import { MaskLines, Magnetic } from "../motion";
 import { useBooking } from "../BookingProvider";
 import { gsap, prefersReduced, onIntroDone } from "@/lib/gsap";
-import { has } from "@/content/photos";
+import { has, type PhotoKey } from "@/content/photos";
 import { SITE, wa } from "@/config";
 
 /**
@@ -17,7 +17,9 @@ export function Hero() {
   const root = useRef<HTMLElement>(null);
   const media = useRef<HTMLDivElement>(null);
   const { openBooking } = useBooking();
-  const photo = has("noivaBuque");
+  // A melhor noiva disponível tem 1200px no lado menor (< 1400): hero tipográfico. Para usar foto, troque por uma chave de photos.ts.
+  const heroPhoto: PhotoKey | undefined = undefined;
+  const photo = has(heroPhoto);
 
   useEffect(() => {
     if (prefersReduced()) return;
@@ -55,7 +57,7 @@ export function Hero() {
         <div className="order-1 lg:order-2 lg:col-span-5">
           <div ref={media} className="ml-auto h-[32svh] w-[min(52vw,14rem)] lg:mx-auto lg:h-[74svh] lg:w-full lg:max-w-[28rem]">
             {photo ? (
-              <Photo name="noivaBuque" priority objectPosition="50% 20%" className="arch h-full w-full" />
+              <Photo name={heroPhoto} priority objectPosition="50% 20%" className="arch h-full w-full" />
             ) : (
               <div className="hero-ta arch flex h-full w-full items-center justify-center bg-gradient-to-b from-nude to-[#d8bfae]" aria-hidden="true">
                 <Monogram draw color="#7A2E3A" className="h-1/3 w-auto lg:h-1/4" />

@@ -46,3 +46,6 @@ Reveal por máscara linha a linha, Ken Burns lento no hero, marquee reativo ao s
 ## Do's and Don'ts
 - Faça: fotos grandes, frases curtas, TODO visível no código para o que depende do salão.
 - Não faça: inventar depoimentos/números/preços, gradiente roxo, emojis como ícones, promessas de resultado em estética.
+
+## Fotografia
+Somente fotos reais do salão (Google Maps "Pelo proprietário" e Instagram). Tratamento único aplicado em `scripts/process-photos.mjs`: calor sutil, saturação 0,92, contraste +4% e leve fade nos pretos, para parecer um ensaio só sem esconder que é o salão real. Até 14 fotos no site, sem repetição entre seções. Sem foto de qualidade, a seção usa tipografia (número grande, monograma ou cartões de texto), nunca foto de banco. Equipe em cards tipográficos.

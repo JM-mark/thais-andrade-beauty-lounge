@@ -2,7 +2,6 @@ import { SITE, wa } from "@/config";
 
 export type Booking = {
   services: string[];
-  pro: string;
   date: string; // yyyy-mm-dd
   time: string;
   name: string;
@@ -37,7 +36,6 @@ export function buildMessage(b: Booking) {
   const lines = [
     "Olá! Gostaria de agendar pelo site 💐",
     `*Serviço:* ${b.services.join(" + ")}`,
-    `*Profissional:* ${b.pro}`,
     `*Data:* ${prettyDate(b.date)} às ${b.time}`,
   ];
   if (b.weddingDate) lines.push(`*Data do casamento:* ${prettyDate(b.weddingDate)}`);
@@ -48,9 +46,10 @@ export function buildMessage(b: Booking) {
   return lines.join("\n");
 }
 
-export function whatsappUrl(b: Booking, fallbackLink?: string) {
+export function whatsappUrl(b: Booking) {
+  // Todos os pedidos vão para um único número (SITE.WHATSAPP_NUMBER). Sem número, abre o Linktree do salão.
   if (SITE.WHATSAPP_NUMBER) return wa(buildMessage(b));
-  return fallbackLink || SITE.linktree;
+  return SITE.linktree;
 }
 
 export function buildIcs(b: Booking) {
@@ -66,7 +65,7 @@ export function buildIcs(b: Booking) {
     `DTSTART:${f(start)}`, `DTEND:${f(end)}`,
     `SUMMARY:${b.services.join(" + ")} (pedido) - ${SITE.name}`,
     `LOCATION:${SITE.address}`,
-    `DESCRIPTION:Pedido de agendamento com ${b.pro}. Aguardando confirmação pelo WhatsApp.`,
+    "DESCRIPTION:Pedido de agendamento. Aguardando confirmação pelo WhatsApp.",
     "END:VEVENT", "END:VCALENDAR",
   ].join("\r\n");
 }

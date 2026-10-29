@@ -20,8 +20,8 @@ npm run lint
 |---|---|
 | WhatsApp, endereço, horário, nota do Google, links | `src/config.ts` |
 | Serviços e textos | `src/content/services.ts` |
-| Equipe e links de agendamento | `src/content/team.ts` |
-| Fotos (Unsplash na prévia) | `src/content/photos.ts` |
+| Equipe (só nomes; todo pedido vai para o WhatsApp único de `src/config.ts`) | `src/content/team.ts` |
+| Fotos reais (Maps/Instagram do salão) | `src/content/photos.ts`, arquivos em `public/fotos/`; reprocessar com `node scripts/process-photos.mjs` |
 | FAQ | `src/content/faq.ts` |
 | Dias e horários do agendamento (mock) | `src/lib/availability.ts` |
 | Mensagem do WhatsApp e arquivo `.ics` | `src/lib/booking.ts` |
@@ -50,12 +50,12 @@ O workflow `.github/workflows/deploy.yml` faz o build com o basePath do reposit�
 
 ## Como o agendamento funciona
 
-Stepper em 4 etapas (serviço, profissional, data/horário, dados) que roda 100% no navegador. Ao confirmar, abre `wa.me/<número>?text=...` com a mensagem pronta. A interface sempre diz que é um **pedido**; o salão confirma pelo WhatsApp. Há botão "Adicionar à agenda" (`.ics`). Se `WHATSAPP_NUMBER` ficar vazio, o site copia a mensagem e abre o link do Linktree da profissional.
+Stepper em 3 etapas (serviço, data/horário, dados) que roda 100% no navegador. Ao confirmar, abre `wa.me/<número>?text=...` com a mensagem pronta. A interface sempre diz que é um **pedido**; o salão confirma pelo WhatsApp. Há botão "Adicionar à agenda" (`.ics`). Se `WHATSAPP_NUMBER` ficar vazio, o site copia a mensagem e abre o Linktree do salão.
 
 ## Lista de TODOs que dependem do salão
 
-- Logo em alta resolução (substituir o wordmark provisório e a imagem `public/og.jpg`, que é um cartão de texto provisório)
-- Fotos reais do espaço, da equipe e dos trabalhos (hoje são do Unsplash)
+- Logo em alta resolução (substituir o wordmark provisório; o `public/og.jpg` é um recorte da foto da noiva e pode ser refeito com o hero final)
+- Fotos em resolução original do espaço, da equipe e dos trabalhos (hoje vêm do Google Maps e do Instagram do salão, em tamanho reduzido)
 - Confirmar que (19) 98717-2370 é o WhatsApp principal
 - Horário de funcionamento e dias de atendimento (hoje: domingo fechado, horários mock)
 - Especialidade de cada profissional; confirmar se Franciele faz parte da equipe
@@ -66,3 +66,11 @@ Stepper em 4 etapas (serviço, profissional, data/horário, dados) que roda 100%
 - Atualizar nota e número de avaliações do Google antes de publicar
 - Revisar a política de privacidade (`/privacidade`) com assessoria jurídica
 - Comparações de antes e depois só com casos reais autorizados
+
+## Origem das fotos
+
+Todas as fotos do site foram retiradas do Google Maps (aba "Pelo proprietário") e do Instagram do próprio salão. Não há fotos de banco. Cada foto está listada em `src/content/photos.ts` com `fonte` e link do post.
+
+**Fotos de clientes retiradas do Instagram/Google do salão. Confirmar autorização antes da publicação oficial.**
+
+Hero tipográfico: a melhor foto de noiva disponível tem 1200 px no lado menor (abaixo de 1400). Quando o salão enviar o original, defina `heroPhoto` em `src/components/sections/Hero.tsx`.
